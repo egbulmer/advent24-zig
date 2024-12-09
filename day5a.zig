@@ -15,23 +15,23 @@ pub fn main() void {
 
     // We use peek() here because when we reach the first report line we don't want the iterator
     // to advanced to it.
-    while (line_it.peek()) |rule| {
-        if (rule.len > 5) break;
-        rules.put(rule, {}) catch unreachable;
+    while (line_it.peek()) |line| {
+        if (line.len > 5) break;
+        rules.put(line, {}) catch unreachable;
         _ = line_it.next();
     }
 
     var result: u32 = 0;
 
-    var report: [24]u32 = undefined;
+    var update_nums: [24]u32 = undefined;
     var rule: [5]u8 = undefined;
 
-    while (line_it.next()) |update| {
-        var num_it = std.mem.tokenizeScalar(u8, update, ',');
+    while (line_it.next()) |line| {
+        var num_it = std.mem.tokenizeScalar(u8, line, ',');
 
         var i: usize = 0;
         while (num_it.next()) |s| {
-            report[i] = std.fmt.parseInt(u32, s, 10) catch unreachable;
+            update_nums[i] = std.fmt.parseInt(u32, s, 10) catch unreachable;
             i += 1;
         }
 
@@ -39,13 +39,13 @@ pub fn main() void {
 
         i -= 1;
         while (i >= 1) : (i -= 1) {
-            _ = std.fmt.bufPrint(&rule, "{d}|{d}", .{ report[i - 1], report[i] }) catch unreachable;
+            _ = std.fmt.bufPrint(&rule, "{d}|{d}", .{ update_nums[i - 1], update_nums[i] }) catch unreachable;
             if (!rules.contains(&rule)) break;
         }
 
         const correct_order = i == 0;
         if (correct_order) {
-            const middle_num = report[n / 2];
+            const middle_num = update_nums[n / 2];
             result += middle_num;
         }
     }
