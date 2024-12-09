@@ -9,7 +9,6 @@ var height: usize = 0;
 var map: [max_size * max_size]u8 = undefined;
 
 const Direction = enum { N, S, E, W };
-
 const MoveResult = enum { success, blocked, oob };
 
 const Guard = struct {
@@ -62,7 +61,6 @@ const Guard = struct {
 };
 
 var guard: Guard = .{ .x = 0, .y = 0, .dir = .N };
-var path_buf: [1024]usize = undefined;
 
 pub fn main() void {
     var row_it = std.mem.tokenizeScalar(u8, input, '\n');
