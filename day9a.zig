@@ -4,8 +4,11 @@ const input = @embedFile("day9_input.txt");
 pub fn main() !void {
     const free_space: u64 = 0;
 
-    var disk: [20000 * 9]u64 = undefined;
+    // In this input the total disk size is 95,307.
+    var disk: [100_000]u64 = undefined;
     var len: usize = 0;
+    // Use 1-based indexing and treat 0s as free blocks. We can fix up the ID later when
+    // calculating the checksum.
     var id: u64 = 1;
     var is_file = true;
 
@@ -36,7 +39,7 @@ pub fn main() !void {
 
     var checksum: u64 = 0;
     for (0..right + 1) |pos| {
-        const file_id = disk[pos] - 1;
+        const file_id = disk[pos] - 1; // Adjust back to 0-based indexing.
         checksum += pos * file_id;
     }
 
